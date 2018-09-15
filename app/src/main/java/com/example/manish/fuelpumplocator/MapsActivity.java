@@ -157,8 +157,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googlePlacesUrl.append("location="+latitude+","+longitude);
         googlePlacesUrl.append("&radius="+10000);
         googlePlacesUrl.append("&type="+placeType);
-        googlePlacesUrl.append("&sensor=true");
-        googlePlacesUrl.append("key="+getResources().getString(R.string.browser_key));
+        //googlePlacesUrl.append("&sensor=true");
+        googlePlacesUrl.append("&key="+getResources().getString(R.string.browser_key));
         Log.d("getUrl",googlePlacesUrl.toString());
         return googlePlacesUrl.toString();
     }
