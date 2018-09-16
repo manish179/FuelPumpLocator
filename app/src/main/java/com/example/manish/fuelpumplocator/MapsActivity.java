@@ -1,6 +1,7 @@
 package com.example.manish.fuelpumplocator;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.location.Location;
@@ -54,6 +55,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationRequest mLocationRequest;
     IGoogleAPIService mServices;
 
+    MyPlaces currentPlace;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +108,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .enqueue(new Callback<MyPlaces>() {
                     @Override
                     public void onResponse(Call<MyPlaces> call, Response<MyPlaces> response) {
+
+                        currentPlace=response.body();   //remember assign values for current place
+
                         if (response.isSuccessful())
                         {
                             for(int i=0;i<response.body().getResults().length;i++)
@@ -132,6 +138,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 else
                                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
+                                markerOptions.snippet(String.valueOf(i));   //assign index for market
                                 //add to map
                                 mMarker= mMap.addMarker(markerOptions);
 
@@ -225,6 +232,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.setMyLocationEnabled(true);
 
             }
+
+            //make event click on marker
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        //when user select marker , just get result of place and assign to static variable
+                        Common.currentResult=currentPlace.getResults()[Integer.parseInt(marker.getSnippet())];
+                        //start new activity
+                        startActivity(new Intent(MapsActivity.this,ViewPlace.class));
+                        return true;
+                    }
+                });
         }
 
     }

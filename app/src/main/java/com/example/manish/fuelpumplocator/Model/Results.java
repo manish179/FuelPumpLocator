@@ -25,6 +25,8 @@ public class Results {
 
     private Geometry geometry;
 
+    private Opening_hours opening_hours;
+
     public Photos[] getPhotos ()
     {
         return photos;
@@ -143,6 +145,14 @@ public class Results {
     public void setGeometry (Geometry geometry)
     {
         this.geometry = geometry;
+    }
+
+    public Opening_hours getOpening_hours() {
+        return opening_hours;
+    }
+
+    public void setOpening_hours(Opening_hours opening_hours) {
+        this.opening_hours = opening_hours;
     }
 
     @Override
