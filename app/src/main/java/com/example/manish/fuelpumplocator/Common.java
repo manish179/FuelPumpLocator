@@ -1,11 +1,9 @@
 package com.example.manish.fuelpumplocator;
 
-import com.example.manish.fuelpumplocator.Model.MyPlaces;
 import com.example.manish.fuelpumplocator.Model.Results;
 import com.example.manish.fuelpumplocator.Remote.IGoogleAPIService;
 import com.example.manish.fuelpumplocator.Remote.RetrofitClient;
-
-import retrofit2.Retrofit;
+import com.example.manish.fuelpumplocator.Remote.RetrofitScalarClient;
 
 public class Common {
 
@@ -18,6 +16,14 @@ public class Common {
         return RetrofitClient.getClient(GOOGLE_API_URL).create(IGoogleAPIService.class);
 
     }
+
+    public static IGoogleAPIService getGoogleAPIServiceScalars()
+    {
+        return RetrofitScalarClient.getScalarClient(GOOGLE_API_URL).create(IGoogleAPIService.class);
+
+    }
+
+
 
 
 

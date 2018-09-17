@@ -1,5 +1,6 @@
 package com.example.manish.fuelpumplocator;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -26,8 +27,8 @@ public class ViewPlace extends AppCompatActivity {
     RatingBar ratingBar;
     TextView opening_hours,place_address,place_name;
     Button btnViewOnMap;
-    
-    
+    Button btnViewDirections;
+
     IGoogleAPIService mService;
 
     PlaceDetail mPlace;
@@ -45,6 +46,7 @@ public class ViewPlace extends AppCompatActivity {
         place_name=(TextView)findViewById(R.id.place_name);
         opening_hours=(TextView)findViewById(R.id.place_open_hour);
         btnViewOnMap=(Button)findViewById(R.id.btn_show_map);
+        btnViewDirections=(Button)findViewById(R.id.btn_view_directions);
 
         //empty all view
         place_name.setText("");
@@ -59,6 +61,15 @@ public class ViewPlace extends AppCompatActivity {
                 startActivity(mapIntent);
             }
         });
+
+        btnViewDirections.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mapIntent= new Intent(ViewPlace.this,ViewDirections.class);
+                startActivity(mapIntent);
+
+            }
+        });
         
         //photo
         if (Common.currentResult.getPhotos() != null && Common.currentResult.getPhotos().length>0)
@@ -69,6 +80,9 @@ public class ViewPlace extends AppCompatActivity {
                     .error(R.drawable.ic_error_black_24dp)
                     .into(photo);
 
+        }
+        else {
+            photo.setVisibility(View.GONE);
         }
         
         //rating
@@ -96,15 +110,22 @@ public class ViewPlace extends AppCompatActivity {
         
         mService.getDetailPlaces(getPlaceDetailUrl(Common.currentResult.getPlace_id()))
                 .enqueue(new Callback<PlaceDetail>() {
+
                     @Override
                     public void onResponse(Call<PlaceDetail> call, Response<PlaceDetail> response) {
 
-                        mPlace=response.body();
+                        mPlace = response.body();
+                        if (mPlace.getResult() != null) {
+                            place_address.setText(mPlace.getResult().getFormatted_address());
+                            place_name.setText(mPlace.getResult().getName());
 
-                        place_address.setText(mPlace.getResult().getFormatted_address());
-                        place_name.setText(mPlace.getResult().getName());
+                        }
+                        else {
+                            place_name.setVisibility(View.GONE);
+                            place_address.setVisibility(View.GONE);
+                        }
+
                     }
-
                     @Override
                     public void onFailure(Call<PlaceDetail> call, Throwable t) {
 
